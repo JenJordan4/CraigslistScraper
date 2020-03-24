@@ -20,4 +20,19 @@ scraper.get(ADDRESS) do |search_page|
     search['max_bathrooms'] = 2
   end
 
+  results_page = search_form.submit #get the results and store it in a variable
+
+  raw_results = results_page.search('li.result-row') #Within the search, target the li tags with the class "result-row"
+
+  #for each result, collect the needed information and store it to a variable
+  raw_results.each do |result|
+    link = result.search('a')[1]
+    name = link.text.strip
+    url = link.attributes["href"].value
+    price = result.search('span.result-price').first.text #Price shows in duplicate, so only show first.
+    location = result.search('span.result-hood').text[2...-1]
+
+    results << [name, location, price, url] #Push each filtered result row into the empty array on line 10
+  end
+
 end
