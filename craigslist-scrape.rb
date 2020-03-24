@@ -35,4 +35,10 @@ scraper.get(ADDRESS) do |search_page|
     results << [name, location, price, url] #Push each filtered result row into the empty array on line 10
   end
 
+  CSV.open("filename.csv", "w+") do |csv_file|
+    results.each do |row|
+      csv_file << row
+    end
+  end
+  
 end
