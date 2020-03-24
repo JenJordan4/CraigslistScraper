@@ -2,6 +2,10 @@ require 'mechanize'
 require 'pry-byebug'
 require 'csv'
 
+puts "Enter your city as it appears on craigslist.org (e.g. 'miami' or 'newyork')"
+city_name = gets.chomp
+ROOT_URL = "https://#{city_name}.craigslist.org"
+puts "Getting details from #{ROOT_URL}"
 
 scraper = Mechanize.new #Use Mechanize gem to create a scraper
 scraper.history_added = Proc.new { sleep 0.5 } #Prevent hitting craigslist server too frequently
@@ -19,7 +23,7 @@ scraper.get(ADDRESS) do |search_page|
     search['min_bathrooms'] = 2
     search['max_bathrooms'] = 2
   end
-
+  
   results_page = search_form.submit #get the results and store it in a variable
 
   raw_results = results_page.search('li.result-row') #Within the search, target the li tags with the class "result-row"
@@ -41,4 +45,6 @@ scraper.get(ADDRESS) do |search_page|
     end
   end
   
+  puts "Scraping complete. CSV file can be found in same folder as this application."
+
 end
